@@ -1,2 +1,2 @@
 # audio-classification-cnn
-CNN-based audio classification pipeline built on mel-spectrograms. Includes a minimal baseline, data/EDA checklist, and an optional Phase-2 using pretrained audio embeddings (YAMNet/VGGish). Results reported with Accuracy, Macro-F1, and a confusion matrix.
+GWU CSCI-6366 project: audio classification with mel-spectrogram CNN baseline and transfer learning (YAMNet/VGGish). Includes EDA notebook, training script, and metrics (Accuracy/Macro-F1).
