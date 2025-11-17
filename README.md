@@ -5,7 +5,7 @@ This project develops a deep learning classifier for recognizing three animal so
 
 Team Members & GitHub Usernames
 
-Shambhavi Adhikari (G37903602) — Shambhaviadhikari
+Shambhavi Adhikari (G37903602) — Shambhavi Adhikari
 
 Rakshitha Mamilla (G23922354) — their-github-username
 
