@@ -24,6 +24,7 @@ We use the following dataset(s):
   Link: https://www.kaggle.com/datasets/chiragchhaya/human-words-audio-classification
 
 Each audio file is a WAV file labeled as one of three classes:
+
 - `dog`
 - `cat`
 - `bird`
@@ -39,8 +40,9 @@ Planned structure:
 - `data/` – (Git-ignored for large raw data; instructions will be provided to download locally.)
 
 At this stage (Deliverable II), the repo contains:
+
 - `README.md` – project summary, team info, dataset links
-- `notebooks/initial_exploration.ipynb` **or** `src/initial_pipeline.py` – initial project code
+- `notebooks/01_explore_audio.ipynb` – initial project code
 
 ---
 
@@ -62,4 +64,3 @@ At this stage (Deliverable II), the repo contains:
 - Include a minimal baseline model and data/EDA checklist.
 - Add an optional Phase-2 using pretrained audio embeddings (YAMNet/VGGish).
 - Report results using Accuracy, Macro-F1, and a confusion matrix.
-
