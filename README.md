@@ -1,6 +1,6 @@
 # Animal Sound Classifier
 
-This project is for **CSCI 4/6366: Intro to Deep Learning** at The George Washington University.  
+This project is for **CSCI 6366: Neural Networks & Deep Learning** at The George Washington University.  
 We are building a deep learning model to classify animal sounds (**dog**, **cat**, **bird**) from audio clips using:
 
 - Mel-spectrograms and 2D Convolutional Neural Networks (CNNs)
