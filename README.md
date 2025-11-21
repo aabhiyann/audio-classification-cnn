@@ -62,5 +62,5 @@ At this stage (Deliverable II), the repo contains:
 
 - CNN-based audio classification pipeline built on Mel-spectrograms.
 - Include a minimal baseline model and data/EDA checklist.
-- Add an optional Phase-2 using pretrained audio embeddings (YAMNet/VGGish).
+- Add an Phase-2 using pretrained audio embeddings (YAMNet/VGGish).
 - Report results using Accuracy, Macro-F1, and a confusion matrix.
