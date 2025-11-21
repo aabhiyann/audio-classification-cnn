@@ -37,7 +37,7 @@ Planned structure:
 
 - `notebooks/` – Jupyter notebooks for EDA, preprocessing, and model experiments.
 - `src/` – Python scripts for data loading, preprocessing, and model training.
-- `data/` – (Git-ignored for large raw data; instructions will be provided to download locally.)
+- `data/` – Dataset
 
 At this stage (Deliverable II), the repo contains:
 
