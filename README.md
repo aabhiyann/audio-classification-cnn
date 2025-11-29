@@ -122,11 +122,11 @@ All of this is currently implemented and demonstrated in `02_cnn_baseline.ipynb`
 
 ## Current Baseline Results (Summary)
 
-From early runs on a small subset of the data:
+From early runs on a small subset of the data (using the explicit train/val/test split in `02_cnn_baseline.ipynb`):
 
-- **Training accuracy** climbs to roughly **0.85–0.90**.
-- **Validation accuracy** stabilizes around **0.50–0.60**.
-- **Test accuracy** on a held-out set is roughly **0.40–0.60** depending on the exact split and number of epochs.
+- **Training accuracy** ≈ **0.89**
+- **Validation accuracy** ≈ **0.60**
+- **Test accuracy** ≈ **0.42** on a small held-out set.
 
 These numbers indicate that:
 
