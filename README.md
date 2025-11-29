@@ -138,6 +138,22 @@ As we move forward, we will add more systematic experiments, confusion matrices,
 
 ---
 
+## Current Status (Deliverable II) & Next Steps
+
+- **Status**
+
+  - Data downloaded and organized into `dog/`, `cat/`, `bird/` folders under `data/`.
+  - Mel-spectrogram pipeline implemented and validated in `01_explore_audio.ipynb`.
+  - Baseline CNN implemented, trained, and evaluated with explicit train/val/test splits in `02_cnn_baseline.ipynb`.
+  - Initial baseline: train accuracy ≈ 0.89, validation accuracy ≈ 0.60, test accuracy ≈ 0.42 (on a small held-out set).
+
+- **Immediate next steps**
+  - Add a new notebook (e.g., `03_cnn_improved.ipynb`) for improved architectures and regularization experiments.
+  - Start refactoring common code (data loading, preprocessing, model creation) from notebooks into `src/`.
+  - Add confusion matrices and macro-F1 to better understand per-class performance.
+
+---
+
 ## Goals
 
 1. Train a clear **baseline CNN** model on Mel-spectrograms of the audio clips.
