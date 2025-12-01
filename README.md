@@ -48,7 +48,8 @@ Each file is:
   - `bird/` – WAV files labeled as bird
 - `notebooks/`
   - `01_explore_audio.ipynb` – EDA on waveforms and Mel-spectrograms; visual comparison of classes
-  - `02_cnn_baseline.ipynb` – baseline CNN training + evaluation on Mel-spectrogram “images”
+  - `02_cnn_baseline.ipynb` – baseline CNN training + evaluation on Mel-spectrogram "images"
+  - `03_cnn_improved.ipynb` – improved CNN experiments (capacity reduction, regularization)
 - `src/`
   - (planned) Python modules for reusable data loading, preprocessing, and model code
 - `README.md` – this file
@@ -122,11 +123,11 @@ All of this is currently implemented and demonstrated in `02_cnn_baseline.ipynb`
 
 ## Current Baseline Results (Summary)
 
-From early runs on a small subset of the data:
+From early runs on a small subset of the data (using the explicit train/val/test split in `02_cnn_baseline.ipynb`):
 
-- **Training accuracy** climbs to roughly **0.85–0.90**.
-- **Validation accuracy** stabilizes around **0.50–0.60**.
-- **Test accuracy** on a held-out set is roughly **0.40–0.60** depending on the exact split and number of epochs.
+- **Training accuracy** ≈ **0.89**
+- **Validation accuracy** ≈ **0.60**
+- **Test accuracy** ≈ **0.42** on a small held-out set.
 
 These numbers indicate that:
 
@@ -146,9 +147,19 @@ As we move forward, we will add more systematic experiments, confusion matrices,
   - Mel-spectrogram pipeline implemented and validated in `01_explore_audio.ipynb`.
   - Baseline CNN implemented, trained, and evaluated with explicit train/val/test splits in `02_cnn_baseline.ipynb`.
   - Initial baseline: train accuracy ≈ 0.89, validation accuracy ≈ 0.60, test accuracy ≈ 0.42 (on a small held-out set).
+  - **Experiment 1 completed** in `03_cnn_improved.ipynb`: Tested reducing Dense layer from 64 to 32 neurons (~50% parameter reduction). Results showed similar test accuracy (~0.42) but reduced validation accuracy (0.60 → 0.40), indicating that simply reducing capacity didn't improve generalization on our small initial dataset (60 samples).
+
+- **Key Learnings from Initial Experiments**
+
+  - We started with a small subset (60 samples) to rapidly develop and debug our pipeline.
+  - Baseline CNN architecture works reasonably well, confirming our preprocessing pipeline is correct.
+  - With only 9 validation samples (3 per class), validation metrics are very noisy, so results should be interpreted cautiously.
+  - Reducing model capacity alone isn't sufficient; we need better regularization techniques and/or more data.
+  - We have 610 total files available but only used 60 for these initial experiments.
 
 - **Immediate next steps**
-  - Add a new notebook (e.g., `03_cnn_improved.ipynb`) for improved architectures and regularization experiments.
+  - Scale up to use more of the available 610 files for more reliable results.
+  - Try regularization techniques (Dropout, L2 regularization) instead of only reducing capacity.
   - Start refactoring common code (data loading, preprocessing, model creation) from notebooks into `src/`.
   - Add confusion matrices and macro-F1 to better understand per-class performance.
 
