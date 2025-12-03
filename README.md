@@ -1,6 +1,6 @@
 ## Animal Sound Classifier
 
-This project is for **CSCI 6366: Neural Networks & Deep Learning** at The George Washington University.
+This project is for **CSCI 6366: Neural Networks & Deep Learning** at The George Washington University.  
 
 We are building a deep learning model to classify animal sounds (**dog**, **cat**, **bird**) from short audio clips using:
 
@@ -49,7 +49,8 @@ Each file is:
 - `notebooks/`
   - `01_explore_audio.ipynb` – EDA on waveforms and Mel-spectrograms; visual comparison of classes
   - `02_cnn_baseline.ipynb` – baseline CNN training + evaluation on Mel-spectrogram "images"
-  - `03_cnn_improved.ipynb` – improved CNN experiments (capacity reduction, regularization)
+  - `03_cnn_improved.ipynb` – improved CNN experiments (capacity reduction, regularization) on small dataset
+  - `04_cnn_full_data.ipynb` – final experiments on full dataset with comprehensive evaluation
 - `src/`
   - (planned) Python modules for reusable data loading, preprocessing, and model code
 - `README.md` – this file
@@ -121,21 +122,22 @@ All of this is currently implemented and demonstrated in `02_cnn_baseline.ipynb`
 
 ---
 
-## Current Baseline Results (Summary)
+## Final Model and Results
 
-From early runs on a small subset of the data (using the explicit train/val/test split in `02_cnn_baseline.ipynb`):
+We trained several CNN architectures on Mel-spectrograms of animal sounds (dog / cat / bird). Using the full dataset (610 audio clips) and a stratified train/val/test split (440 / 78 / 92), our best model is:
 
-- **Training accuracy** ≈ **0.89**
-- **Validation accuracy** ≈ **0.60**
-- **Test accuracy** ≈ **0.42** on a small held-out set.
+- **CNN + Dropout(0.3)**  
+  Conv(32) → MaxPool → Conv(64) → MaxPool → Flatten → Dense(64, ReLU) → Dropout(0.3) → Dense(3, Softmax)
 
-These numbers indicate that:
+**Test set performance (on 92 held-out clips):**
 
-- The CNN can fit the training data reasonably well.
-- It performs clearly above random guessing (1/3) on validation/test.
-- There is some overfitting, which is expected given the relatively small dataset and simple regularization.
+- Accuracy ≈ **88%**
+- Macro F1 ≈ **0.88**
+- Balanced performance across all three classes
 
-As we move forward, we will add more systematic experiments, confusion matrices, and macro-F1 scores to better understand strengths and failure modes.
+Compared to the baseline CNN without Dropout, the regularized model achieves higher test accuracy and lower test loss, and reduces overfitting. Earlier experiments on a tiny 60-sample subset showed that strong Dropout (0.5) actually hurt performance, highlighting that regularization becomes effective only when enough training data is available.
+
+See `04_cnn_full_data.ipynb` for complete results, confusion matrices, and detailed analysis.
 
 ---
 
