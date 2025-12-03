@@ -164,22 +164,26 @@ See `04_cnn_full_data.ipynb` for complete results, confusion matrices, and detai
   - Data downloaded and organized into `dog/`, `cat/`, `bird/` folders under `data/`.
   - Mel-spectrogram pipeline implemented and validated in `01_explore_audio.ipynb`.
   - Baseline CNN implemented, trained, and evaluated with explicit train/val/test splits in `02_cnn_baseline.ipynb`.
-  - Initial baseline: train accuracy ≈ 0.89, validation accuracy ≈ 0.60, test accuracy ≈ 0.42 (on a small held-out set).
-  - **Experiment 1 completed** in `03_cnn_improved.ipynb`: Tested reducing Dense layer from 64 to 32 neurons (~50% parameter reduction). Results showed similar test accuracy (~0.42) but reduced validation accuracy (0.60 → 0.40), indicating that simply reducing capacity didn't improve generalization on our small initial dataset (60 samples).
+  - Initial baseline on a **small 60-sample subset**: train accuracy ≈ 0.89, validation accuracy ≈ 0.60, test accuracy ≈ 0.42.
+  - **Experiment 1** (capacity reduction) in `03_cnn_improved.ipynb`: reducing the Dense layer from 64 → 32 halved parameters but did **not** improve generalization on the tiny dataset.
+  - **Experiment 2** (Dropout on small dataset) in `03_cnn_improved.ipynb`: strong Dropout (0.5) further hurt performance, showing that heavy regularization + very little data leads to underfitting.
+  - **Full-data experiments completed** in `04_cnn_full_data.ipynb`: trained baseline CNN and CNN+Dropout(0.3) on all 610 clips (440 train / 78 val / 92 test). The Dropout model is our final chosen model with ≈88% test accuracy.
 
 - **Key Learnings from Initial Experiments**
 
-  - We started with a small subset (60 samples) to rapidly develop and debug our pipeline.
-  - Baseline CNN architecture works reasonably well, confirming our preprocessing pipeline is correct.
-  - With only 9 validation samples (3 per class), validation metrics are very noisy, so results should be interpreted cautiously.
-  - Reducing model capacity alone isn't sufficient; we need better regularization techniques and/or more data.
-  - We have 610 total files available but only used 60 for these initial experiments.
+  - Starting with a small subset (60 samples) was useful for debugging and validating the pipeline.
+  - Baseline CNN + Mel-spectrogram preprocessing is correct and learns meaningful features.
+  - With only 9 validation samples (3 per class), validation metrics are extremely noisy.
+  - Simply reducing model capacity (Dense 32) does not guarantee better generalization.
+  - Strong Dropout with very small data can hurt performance more than it helps.
+  - Scaling to the full dataset (610 clips) plus moderate Dropout (0.3) significantly improves test accuracy and gives stable metrics.
 
 - **Immediate next steps**
-  - Scale up to use more of the available 610 files for more reliable results.
-  - Try regularization techniques (Dropout, L2 regularization) instead of only reducing capacity.
-  - Start refactoring common code (data loading, preprocessing, model creation) from notebooks into `src/`.
-  - Add confusion matrices and macro-F1 to better understand per-class performance.
+
+  - Refactor common code (data loading, preprocessing, model definitions) from notebooks into `src/` modules.
+  - Implement **transfer learning** experiments using pre-trained audio models (YAMNet, VGGish) and compare against the CNN baseline.
+  - Add more evaluation plots (e.g., ROC-style curves, per-class confusion matrices) and integrate key figures into the final project report/slides.
+  - Optionally explore simple data augmentation (time shift, additive noise) to test robustness.
 
 ---
 
