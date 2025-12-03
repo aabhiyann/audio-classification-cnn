@@ -1,6 +1,6 @@
 ## Animal Sound Classifier
 
-This project is for **CSCI 6366: Neural Networks & Deep Learning** at The George Washington University.  
+This project is for **CSCI 6366: Neural Networks & Deep Learning** at The George Washington University.
 
 We are building a deep learning model to classify animal sounds (**dog**, **cat**, **bird**) from short audio clips using:
 
@@ -119,6 +119,22 @@ At a high level, the current baseline pipeline does:
    - Compile with `optimizer="adam"`, `loss="categorical_crossentropy"`, `metrics=["accuracy"]`.
 
 All of this is currently implemented and demonstrated in `02_cnn_baseline.ipynb`.
+
+---
+
+## Baseline Results (Small Dataset)
+
+From early runs on a small subset of the data (using the explicit train/val/test split in `02_cnn_baseline.ipynb`):
+
+- **Training accuracy** ≈ **0.89**
+- **Validation accuracy** ≈ **0.60**
+- **Test accuracy** ≈ **0.42** on a small held-out set.
+
+These numbers indicate that:
+
+- The CNN can fit the training data reasonably well.
+- It performs clearly above random guessing (1/3) on validation/test.
+- There is some overfitting, which is expected given the relatively small dataset and simple regularization.
 
 ---
 
