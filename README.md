@@ -51,6 +51,7 @@ Each file is:
   - `02_cnn_baseline.ipynb` – baseline CNN training + evaluation on Mel-spectrogram "images"
   - `03_cnn_improved.ipynb` – improved CNN experiments (capacity reduction, regularization) on small dataset
   - `04_cnn_full_data.ipynb` – final experiments on full dataset with comprehensive evaluation
+  - `05_transfer_learning.ipynb` – transfer learning with YAMNet embeddings; comparison with CNN models
 - `src/`
   - (planned) Python modules for reusable data loading, preprocessing, and model code
 - `README.md` – this file
@@ -155,6 +156,22 @@ Compared to the baseline CNN without Dropout, the regularized model achieves hig
 
 See `04_cnn_full_data.ipynb` for complete results, confusion matrices, and detailed analysis.
 
+### Transfer Learning Results (YAMNet)
+
+We also experimented with transfer learning using pre-trained YAMNet embeddings (`05_transfer_learning.ipynb`):
+
+- **YAMNet + Dense Head**: Test accuracy ≈ **62%**, Macro F1 ≈ **0.62**
+
+**Comparison of all models:**
+
+| Model | Test Accuracy | Test Loss | Macro F1 | Notes |
+|-------|--------------:|----------:|---------:|-------|
+| Baseline CNN | 83.70% | 0.6283 | ~0.81 | Trained from scratch |
+| **CNN + Dropout(0.3)** | **88.04%** | 0.5503 | **~0.88** | **Best model** |
+| YAMNet + Dense Head | 61.96% | 0.8990 | ~0.62 | Transfer learning |
+
+**Key finding**: Training a CNN from scratch on Mel-spectrograms outperformed transfer learning with YAMNet for this specific task. This demonstrates that transfer learning is not always better—it depends on the task, dataset size, and domain alignment. See `05_transfer_learning.ipynb` for detailed analysis.
+
 ---
 
 ## Current Status (Deliverable II) & Next Steps
@@ -168,6 +185,7 @@ See `04_cnn_full_data.ipynb` for complete results, confusion matrices, and detai
   - **Experiment 1** (capacity reduction) in `03_cnn_improved.ipynb`: reducing the Dense layer from 64 → 32 halved parameters but did **not** improve generalization on the tiny dataset.
   - **Experiment 2** (Dropout on small dataset) in `03_cnn_improved.ipynb`: strong Dropout (0.5) further hurt performance, showing that heavy regularization + very little data leads to underfitting.
   - **Full-data experiments completed** in `04_cnn_full_data.ipynb`: trained baseline CNN and CNN+Dropout(0.3) on all 610 clips (440 train / 78 val / 92 test). The Dropout model is our final chosen model with ≈88% test accuracy.
+  - **Transfer learning experiments completed** in `05_transfer_learning.ipynb`: used pre-trained YAMNet to extract embeddings and trained a classifier head. YAMNet achieved ≈62% test accuracy, confirming that CNN from scratch is better for this task.
 
 - **Key Learnings from Initial Experiments**
 
@@ -181,9 +199,9 @@ See `04_cnn_full_data.ipynb` for complete results, confusion matrices, and detai
 - **Immediate next steps**
 
   - Refactor common code (data loading, preprocessing, model definitions) from notebooks into `src/` modules.
-  - Implement **transfer learning** experiments using pre-trained audio models (YAMNet, VGGish) and compare against the CNN baseline.
-  - Add more evaluation plots (e.g., ROC-style curves, per-class confusion matrices) and integrate key figures into the final project report/slides.
+  - Prepare final project presentation summarizing all experiments and findings.
   - Optionally explore simple data augmentation (time shift, additive noise) to test robustness.
+  - Optionally save final model weights for reproducibility.
 
 ---
 
