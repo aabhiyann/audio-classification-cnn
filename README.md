@@ -49,7 +49,9 @@ Each file is:
 - `notebooks/`
   - `01_explore_audio.ipynb` – EDA on waveforms and Mel-spectrograms; visual comparison of classes
   - `02_cnn_baseline.ipynb` – baseline CNN training + evaluation on Mel-spectrogram "images"
-  - `03_cnn_improved.ipynb` – improved CNN experiments (capacity reduction, regularization)
+  - `03_cnn_improved.ipynb` – improved CNN experiments (capacity reduction, regularization) on small dataset
+  - `04_cnn_full_data.ipynb` – final experiments on full dataset with comprehensive evaluation
+  - `05_transfer_learning.ipynb` – transfer learning with YAMNet embeddings; comparison with CNN models
 - `src/`
   - (planned) Python modules for reusable data loading, preprocessing, and model code
 - `README.md` – this file
@@ -121,7 +123,7 @@ All of this is currently implemented and demonstrated in `02_cnn_baseline.ipynb`
 
 ---
 
-## Current Baseline Results (Summary)
+## Baseline Results (Small Dataset)
 
 From early runs on a small subset of the data (using the explicit train/val/test split in `02_cnn_baseline.ipynb`):
 
@@ -135,7 +137,40 @@ These numbers indicate that:
 - It performs clearly above random guessing (1/3) on validation/test.
 - There is some overfitting, which is expected given the relatively small dataset and simple regularization.
 
-As we move forward, we will add more systematic experiments, confusion matrices, and macro-F1 scores to better understand strengths and failure modes.
+---
+
+## Final Model and Results
+
+We trained several CNN architectures on Mel-spectrograms of animal sounds (dog / cat / bird). Using the full dataset (610 audio clips) and a stratified train/val/test split (440 / 78 / 92), our best model is:
+
+- **CNN + Dropout(0.3)**  
+  Conv(32) → MaxPool → Conv(64) → MaxPool → Flatten → Dense(64, ReLU) → Dropout(0.3) → Dense(3, Softmax)
+
+**Test set performance (on 92 held-out clips):**
+
+- Accuracy ≈ **88%**
+- Macro F1 ≈ **0.88**
+- Balanced performance across all three classes
+
+Compared to the baseline CNN without Dropout, the regularized model achieves higher test accuracy and lower test loss, and reduces overfitting. Earlier experiments on a tiny 60-sample subset showed that strong Dropout (0.5) actually hurt performance, highlighting that regularization becomes effective only when enough training data is available.
+
+See `04_cnn_full_data.ipynb` for complete results, confusion matrices, and detailed analysis.
+
+### Transfer Learning Results (YAMNet)
+
+We also experimented with transfer learning using pre-trained YAMNet embeddings (`05_transfer_learning.ipynb`):
+
+- **YAMNet + Dense Head**: Test accuracy ≈ **62%**, Macro F1 ≈ **0.62**
+
+**Comparison of all models:**
+
+| Model | Test Accuracy | Test Loss | Macro F1 | Notes |
+|-------|--------------:|----------:|---------:|-------|
+| Baseline CNN | 83.70% | 0.6283 | ~0.81 | Trained from scratch |
+| **CNN + Dropout(0.3)** | **88.04%** | 0.5503 | **~0.88** | **Best model** |
+| YAMNet + Dense Head | 61.96% | 0.8990 | ~0.62 | Transfer learning |
+
+**Key finding**: Training a CNN from scratch on Mel-spectrograms outperformed transfer learning with YAMNet for this specific task. This demonstrates that transfer learning is not always better—it depends on the task, dataset size, and domain alignment. See `05_transfer_learning.ipynb` for detailed analysis.
 
 ---
 
@@ -146,22 +181,27 @@ As we move forward, we will add more systematic experiments, confusion matrices,
   - Data downloaded and organized into `dog/`, `cat/`, `bird/` folders under `data/`.
   - Mel-spectrogram pipeline implemented and validated in `01_explore_audio.ipynb`.
   - Baseline CNN implemented, trained, and evaluated with explicit train/val/test splits in `02_cnn_baseline.ipynb`.
-  - Initial baseline: train accuracy ≈ 0.89, validation accuracy ≈ 0.60, test accuracy ≈ 0.42 (on a small held-out set).
-  - **Experiment 1 completed** in `03_cnn_improved.ipynb`: Tested reducing Dense layer from 64 to 32 neurons (~50% parameter reduction). Results showed similar test accuracy (~0.42) but reduced validation accuracy (0.60 → 0.40), indicating that simply reducing capacity didn't improve generalization on our small initial dataset (60 samples).
+  - Initial baseline on a **small 60-sample subset**: train accuracy ≈ 0.89, validation accuracy ≈ 0.60, test accuracy ≈ 0.42.
+  - **Experiment 1** (capacity reduction) in `03_cnn_improved.ipynb`: reducing the Dense layer from 64 → 32 halved parameters but did **not** improve generalization on the tiny dataset.
+  - **Experiment 2** (Dropout on small dataset) in `03_cnn_improved.ipynb`: strong Dropout (0.5) further hurt performance, showing that heavy regularization + very little data leads to underfitting.
+  - **Full-data experiments completed** in `04_cnn_full_data.ipynb`: trained baseline CNN and CNN+Dropout(0.3) on all 610 clips (440 train / 78 val / 92 test). The Dropout model is our final chosen model with ≈88% test accuracy.
+  - **Transfer learning experiments completed** in `05_transfer_learning.ipynb`: used pre-trained YAMNet to extract embeddings and trained a classifier head. YAMNet achieved ≈62% test accuracy, confirming that CNN from scratch is better for this task.
 
 - **Key Learnings from Initial Experiments**
 
-  - We started with a small subset (60 samples) to rapidly develop and debug our pipeline.
-  - Baseline CNN architecture works reasonably well, confirming our preprocessing pipeline is correct.
-  - With only 9 validation samples (3 per class), validation metrics are very noisy, so results should be interpreted cautiously.
-  - Reducing model capacity alone isn't sufficient; we need better regularization techniques and/or more data.
-  - We have 610 total files available but only used 60 for these initial experiments.
+  - Starting with a small subset (60 samples) was useful for debugging and validating the pipeline.
+  - Baseline CNN + Mel-spectrogram preprocessing is correct and learns meaningful features.
+  - With only 9 validation samples (3 per class), validation metrics are extremely noisy.
+  - Simply reducing model capacity (Dense 32) does not guarantee better generalization.
+  - Strong Dropout with very small data can hurt performance more than it helps.
+  - Scaling to the full dataset (610 clips) plus moderate Dropout (0.3) significantly improves test accuracy and gives stable metrics.
 
 - **Immediate next steps**
-  - Scale up to use more of the available 610 files for more reliable results.
-  - Try regularization techniques (Dropout, L2 regularization) instead of only reducing capacity.
-  - Start refactoring common code (data loading, preprocessing, model creation) from notebooks into `src/`.
-  - Add confusion matrices and macro-F1 to better understand per-class performance.
+
+  - Refactor common code (data loading, preprocessing, model definitions) from notebooks into `src/` modules.
+  - Prepare final project presentation summarizing all experiments and findings.
+  - Optionally explore simple data augmentation (time shift, additive noise) to test robustness.
+  - Optionally save final model weights for reproducibility.
 
 ---
 
