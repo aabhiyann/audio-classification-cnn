@@ -1,6 +1,6 @@
 ## Animal Sound Classifier
 
-This project is for **CSCI 6366: Neural Networks & Deep Learning** at The George Washington University.  
+This project is for **CSCI 6366: Neural Networks & Deep Learning** at The George Washington University.
 
 We build deep learning models to classify animal sounds (**dog**, **cat**, **bird**) from short audio clips using:
 
@@ -174,6 +174,7 @@ In addition to the CNN models above, we explored more advanced architectures in 
 **Input:** 128×128 Mel-spectrograms, reshaped to `(time, freq, 1)`
 
 **Architecture:**
+
 - **CNN feature extractor:**
   - Conv2D(32) → BatchNorm → MaxPool
   - Conv2D(64) → BatchNorm → MaxPool
@@ -184,6 +185,7 @@ In addition to the CNN models above, we explored more advanced architectures in 
 - **Dense(3, softmax)** classifier
 
 **Results (80/20 train/validation split):**
+
 - Validation accuracy ≈ **78.69%**
 - Training accuracy quickly reaches ~100%, while validation accuracy stabilizes around 78–79%, indicating some overfitting but good performance.
 
@@ -196,6 +198,7 @@ The CRNN shows that adding temporal modeling with GRUs can reach competitive per
 **Input:** 128×128 Mel-spectrograms treated as images
 
 **Architecture:**
+
 - Custom `PatchLayer` to extract non-overlapping 16×16 patches
 - `PatchEmbedding` layer to project patches and add positional embeddings
 - Stack of Transformer encoder blocks:
@@ -205,6 +208,7 @@ The CRNN shows that adding temporal modeling with GRUs can reach competitive per
 - Dropout(0.3) → Dense(3, softmax)
 
 **Results (80/20 train/validation split):**
+
 - Validation accuracy ≈ **35–40%**, close to random guessing.
 - Loss remains around ~1.09–1.12, indicating the model underfits the dataset.
 
@@ -217,6 +221,7 @@ The ViT experiment suggests that, under our data and compute constraints, a tran
 We also experimented with transfer learning using pre-trained YAMNet embeddings (`05_transfer_learning.ipynb`):
 
 For each audio clip:
+
 1. Load waveform at 16 kHz
 2. Run YAMNet to obtain frame-level 1024-D embeddings
 3. Average embeddings over time to get a single 1024-D vector per clip
@@ -233,13 +238,13 @@ Using the same stratified train/val/test split as the CNN models:
 
 ## Overall Comparison
 
-| Model | Metric Split | Accuracy | Test Loss | Macro F1 | Notes |
-|-------|-------------:|---------:|----------:|---------:|-------|
-| Baseline CNN | Test (full data) | 83.70% | 0.6283 | ~0.81 | Trained from scratch |
-| **CNN + Dropout(0.3)** | Test (full data) | **88.04%** | 0.5503 | **~0.88** | **Best model** |
-| CRNN (CNN + BiGRU) | Val (80/20 split) | ~78.69% | ~0.80 | – | Competitive but slightly lower |
-| YAMNet + Dense Head | Test (full data) | 61.96% | 0.8990 | ~0.62 | Transfer learning from AudioSet |
-| ViT-style Transformer | Val (80/20 split) | ~35–40% | ~1.10 | – | Underfits; needs more data/tuning |
+| Model                  |      Metric Split |   Accuracy | Test Loss |  Macro F1 | Notes                             |
+| ---------------------- | ----------------: | ---------: | --------: | --------: | --------------------------------- |
+| Baseline CNN           |  Test (full data) |     83.70% |    0.6283 |     ~0.81 | Trained from scratch              |
+| **CNN + Dropout(0.3)** |  Test (full data) | **88.04%** |    0.5503 | **~0.88** | **Best model**                    |
+| CRNN (CNN + BiGRU)     | Val (80/20 split) |    ~78.69% |     ~0.80 |         – | Competitive but slightly lower    |
+| YAMNet + Dense Head    |  Test (full data) |     61.96% |    0.8990 |     ~0.62 | Transfer learning from AudioSet   |
+| ViT-style Transformer  | Val (80/20 split) |    ~35–40% |     ~1.10 |         – | Underfits; needs more data/tuning |
 
 **Key findings:**
 
