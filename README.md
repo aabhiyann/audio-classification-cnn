@@ -242,9 +242,9 @@ Using the same stratified train/val/test split as the CNN models:
 | ---------------------- | ----------------: | ---------: | --------: | --------: | --------------------------------- |
 | Baseline CNN           |  Test (full data) |     83.70% |    0.6283 |     ~0.81 | Trained from scratch              |
 | **CNN + Dropout(0.3)** |  Test (full data) | **88.04%** |    0.5503 | **~0.88** | **Best model**                    |
-| CRNN (CNN + BiGRU)     | Val (80/20 split) |    ~78.69% |     ~0.80 |         – | Competitive but slightly lower    |
+| CRNN (CNN + BiGRU)     | Val (80/20 split) |    **89.75%** |     ~0.80 |         – | Competitive but slightly lower    |
 | YAMNet + Dense Head    |  Test (full data) |     61.96% |    0.8990 |     ~0.62 | Transfer learning from AudioSet   |
-| ViT-style Transformer  | Val (80/20 split) |    **34.63%**% |     ~1.10 |         – | Underfits; needs more data/tuning |
+| ViT-style Transformer  | Val (80/20 split) |    **32.79%**% |     ~1.10 |         – | Underfits; needs more data/tuning |
 
 **Key findings:**
 
