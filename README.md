@@ -272,6 +272,8 @@ This notebook improves on Notebook 05 by preserving temporal information:
 | YAMNet (Averaged)      |  Test (full data) |     61.96% |    0.8990 |     ~0.62 | Transfer learning from AudioSet             |
 | ViT-style Transformer  | Val (80/20 split) |    ~35–40% |     ~1.10 |         – | Validation metrics only                     |
 
+**Note:** Macro F1 is reported only for models evaluated on test sets. Models evaluated on validation sets (CRNN, ViT) show "–" as Macro F1 was not calculated for those experiments.
+
 **Key findings:**
 
 - Training a CNN from scratch on Mel-spectrograms outperformed both transfer learning (YAMNet) and more complex architectures (CRNN, ViT) on this specific task.
