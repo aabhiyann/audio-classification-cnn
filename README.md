@@ -174,7 +174,7 @@ We also experimented with transfer learning using pre-trained YAMNet embeddings 
 | Baseline CNN           |        83.70% |    0.6283 |     ~0.81 | Trained from scratch |
 | **CNN + Dropout(0.3)** |    **88.04%** |    0.5503 | **~0.88** | **Best model**       |
 | YAMNet + Dense Head    |        61.96% |    0.8990 |     ~0.62 | Transfer learning    |
-   
+  
 **Key finding**: Training a CNN from scratch on Mel-spectrograms outperformed transfer learning with YAMNet for this specific task. This demonstrates that transfer learning is not always better—it depends on the task, dataset size, and domain alignment. See `05_transfer_learning.ipynb` for detailed analysis.
 
 ---
