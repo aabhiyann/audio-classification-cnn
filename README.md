@@ -23,22 +23,22 @@ The end goal is to build a clean, reproducible pipeline and compare a simple CNN
 
 ## Dataset
 
-We use the following dataset:
+We use the **Human Words Audio Classification** dataset (Kaggle):
 
-- **Human Words Audio Classification (Kaggle)**  
-  Link: https://www.kaggle.com/datasets/chiragchhaya/human-words-audio-classification
+https://www.kaggle.com/datasets/chiragchhaya/human-words-audio-classification
 
-After filtering, each audio file is treated as belonging to one of three classes:
+Each audio file is labeled as:
 
 - `dog`
 - `cat`
 - `bird`
 
-Each file is:
+Properties:
 
-- A mono `.wav` clip
-- Resampled to \(16{,}000\) Hz during preprocessing
-- Roughly 1 second in duration (so they can be converted into fixed-size spectrograms)
+- Mono `.wav` file
+- Automatically resampled to **16 kHz**
+- ~1 second duration
+- Converted into **128×128 Mel-spectrograms**
 
 ---
 
@@ -55,7 +55,8 @@ Each file is:
   - `02_ViT_exlore.ipynb` – Vision Transformer–style classifier on Mel-spectrogram patches
   - `03_cnn_improved.ipynb` – improved CNN experiments (capacity reduction, regularization) on a small dataset
   - `04_cnn_full_data.ipynb` – final CNN experiments on full dataset with comprehensive evaluation
-  - `05_transfer_learning.ipynb` – transfer learning with YAMNet embeddings; comparison with CNN models
+  - `05_transfer_learning.ipynb` – transfer learning with YAMNet embeddings (averaged); comparison with CNN models
+  - `06_transfer_learning_yamnet_embeddings.ipynb` – transfer learning with YAMNet embeddings (full sequence); preserves temporal information
 - `src/`
   - (planned) Python modules for reusable data loading, preprocessing, and model code
 - `README.md` – this file
@@ -218,21 +219,42 @@ The ViT experiment suggests that, under our data and compute constraints, a tran
 
 ## Transfer Learning Results (YAMNet)
 
-We also experimented with transfer learning using pre-trained YAMNet embeddings (`05_transfer_learning.ipynb`):
+We experimented with transfer learning using pre-trained YAMNet embeddings in two notebooks:
+
+### Notebook 05: YAMNet with Averaged Embeddings
+
+**Notebook:** `05_transfer_learning.ipynb`
 
 For each audio clip:
 
 1. Load waveform at 16 kHz
 2. Run YAMNet to obtain frame-level 1024-D embeddings
-3. Average embeddings over time to get a single 1024-D vector per clip
+3. **Average embeddings over time** to get a single 1024-D vector per clip
 4. Train a small classifier head:
    - Dense(128, ReLU) → Dropout(0.3) → Dense(3, softmax)
 
-Using the same stratified train/val/test split as the CNN models:
+**Results:**
+- Test accuracy ≈ **62%**
+- Macro F1 ≈ **0.62**
 
-- **YAMNet + Dense Head:**
-  - Test accuracy ≈ **62%**
-  - Macro F1 ≈ **0.62**
+### Notebook 06: YAMNet with Full Sequence Embeddings
+
+**Notebook:** `06_transfer_learning_yamnet_embeddings.ipynb`
+
+This notebook improves on Notebook 05 by preserving temporal information:
+
+1. Load waveform at 16 kHz
+2. Run YAMNet to obtain frame-level 1024-D embeddings
+3. **Preserve full sequence** of embeddings (T frames × 1024 dims)
+4. Pad/truncate to fixed length (100 frames × 1024 dims)
+5. Flatten and train a Dense classifier:
+   - Flatten → Dense(16, ReLU) → Dropout(0.1) → Dense(16, ReLU) → Dropout(0.1) → Dense(16, ReLU) → Dense(3, softmax)
+
+**Results:**
+- Test accuracy ≈ **66%** (improvement over averaged approach)
+- Shows that preserving temporal information helps, but still below CNN performance
+
+**Key Finding:** While preserving temporal information improves transfer learning performance (~66% vs ~62%), training from scratch on Mel-spectrograms with a task-specific CNN still outperforms both transfer learning approaches (~88%).
 
 ---
 
@@ -243,7 +265,8 @@ Using the same stratified train/val/test split as the CNN models:
 | Baseline CNN           |  Test (full data) |     83.70% |    0.6283 |     ~0.81 | Trained from scratch              |
 | **CNN + Dropout(0.3)** |  Test (full data) | **88.04%** |    0.5503 | **~0.88** | **Best model**                    |
 | CRNN (CNN + BiGRU)     | Val (80/20 split) |    ~78.69% |     ~0.80 |         – | Competitive but slightly lower    |
-| YAMNet + Dense Head    |  Test (full data) |     61.96% |    0.8990 |     ~0.62 | Transfer learning from AudioSet   |
+| YAMNet (Full Sequence) |  Test (full data) |      ~66%  |     ~0.90 |         – | Transfer learning - preserves temporal info |
+| YAMNet (Averaged)      |  Test (full data) |     61.96% |    0.8990 |     ~0.62 | Transfer learning from AudioSet   |
 | ViT-style Transformer  | Val (80/20 split) |    ~35–40% |     ~1.10 |         – | Underfits; needs more data/tuning |
 
 **Key findings:**
@@ -265,7 +288,8 @@ Using the same stratified train/val/test split as the CNN models:
 - **Full-data experiments** in `04_cnn_full_data.ipynb`: trained baseline CNN and CNN+Dropout(0.3) on all 610 clips (440 train / 78 val / 92 test). The Dropout model is our final chosen model with ≈88% test accuracy and macro F1 ≈0.88.
 - **CRNN experiments** in `02_crnn_explore.ipynb`: hybrid CNN + Bidirectional GRU model reaching ≈78.69% validation accuracy.
 - **ViT experiments** in `02_ViT_exlore.ipynb`: transformer-style classifier that underperforms (~35–40% validation accuracy), illustrating the limits of complex models with limited data.
-- **Transfer learning experiments** in `05_transfer_learning.ipynb`: YAMNet embeddings + Dense head reaching ≈62% test accuracy, confirming that the task-specific CNN is better for this dataset.
+- **Transfer learning experiments** in `05_transfer_learning.ipynb`: YAMNet embeddings (averaged) + Dense head reaching ≈62% test accuracy.
+- **Improved transfer learning** in `06_transfer_learning_yamnet_embeddings.ipynb`: YAMNet embeddings (full sequence) reaching ≈66% test accuracy, showing that preserving temporal information helps but still confirming that the task-specific CNN is better for this dataset.
 
 ---
 
