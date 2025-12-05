@@ -234,6 +234,7 @@ For each audio clip:
    - Dense(128, ReLU) → Dropout(0.3) → Dense(3, softmax)
 
 **Results:**
+
 - Test accuracy ≈ **62%**
 - Macro F1 ≈ **0.62**
 
@@ -251,7 +252,9 @@ This notebook improves on Notebook 05 by preserving temporal information:
    - Flatten → Dense(16, ReLU) → Dropout(0.1) → Dense(16, ReLU) → Dropout(0.1) → Dense(16, ReLU) → Dense(3, softmax)
 
 **Results:**
+
 - Test accuracy ≈ **66%** (improvement over averaged approach)
+- Macro F1 ≈ **0.64** (improvement over averaged approach's 0.62)
 - Shows that preserving temporal information helps, but still below CNN performance
 
 **Key Finding:** While preserving temporal information improves transfer learning performance (~66% vs ~62%), training from scratch on Mel-spectrograms with a task-specific CNN still outperforms both transfer learning approaches (~88%).
@@ -260,14 +263,14 @@ This notebook improves on Notebook 05 by preserving temporal information:
 
 ## Overall Comparison
 
-| Model                  |      Metric Split |   Accuracy | Test Loss |  Macro F1 | Notes                             |
-| ---------------------- | ----------------: | ---------: | --------: | --------: | --------------------------------- |
-| Baseline CNN           |  Test (full data) |     83.70% |    0.6283 |     ~0.81 | Trained from scratch              |
-| **CNN + Dropout(0.3)** |  Test (full data) | **88.04%** |    0.5503 | **~0.88** | **Best model**                    |
-| CRNN (CNN + BiGRU)     | Val (80/20 split) |    ~78.69% |     ~0.80 |         – | Competitive but slightly lower    |
-| YAMNet (Full Sequence) |  Test (full data) |      ~66%  |     ~0.90 |         – | Transfer learning - preserves temporal info |
-| YAMNet (Averaged)      |  Test (full data) |     61.96% |    0.8990 |     ~0.62 | Transfer learning from AudioSet   |
-| ViT-style Transformer  | Val (80/20 split) |    ~35–40% |     ~1.10 |         – | Underfits; needs more data/tuning |
+| Model                  |      Metric Split |   Accuracy | Test Loss |  Macro F1 | Notes                                       |
+| ---------------------- | ----------------: | ---------: | --------: | --------: | ------------------------------------------- |
+| Baseline CNN           |  Test (full data) |     83.70% |    0.6283 |     ~0.81 | Trained from scratch                        |
+| **CNN + Dropout(0.3)** |  Test (full data) | **88.04%** |    0.5503 | **~0.88** | **Best model**                              |
+| CRNN (CNN + BiGRU)     | Val (80/20 split) |    ~78.69% |     ~0.80 |         – | Validation metrics only                     |
+| YAMNet (Full Sequence) |  Test (full data) |       ~66% |     ~0.90 |     ~0.64 | Transfer learning - preserves temporal info |
+| YAMNet (Averaged)      |  Test (full data) |     61.96% |    0.8990 |     ~0.62 | Transfer learning from AudioSet             |
+| ViT-style Transformer  | Val (80/20 split) |    ~35–40% |     ~1.10 |         – | Validation metrics only                     |
 
 **Key findings:**
 
