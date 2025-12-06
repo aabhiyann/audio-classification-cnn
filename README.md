@@ -220,9 +220,9 @@ The ViT experiment suggests that, under our data and compute constraints, a tran
 
 | Model                  | Test Accuracy | Test Loss | Notes                |
 | ---------------------- | ------------: | --------: | -------------------- |
-| Baseline CNN           |         ~90% |     ~0.57 | Trained from scratch |
-| **CNN + Dropout(0.5)** |    **~92%** |     **~0.24** | **Best model**       |
-| YAMNet + Dense Head    |         ~66% |     ~0.96 | Transfer learning    |
+| Baseline CNN           |          ~90% |     ~0.57 | Trained from scratch |
+| **CNN + Dropout(0.5)** |      **~92%** | **~0.24** | **Best model**       |
+| YAMNet + Dense Head    |          ~66% |     ~0.96 | Transfer learning    |
 
 ## **Key finding**: Training a CNN from scratch on Mel-spectrograms achieved ~92% accuracy, significantly outperforming transfer learning with YAMNet (~66%). This demonstrates that transfer learning is not always better—it depends on the task, dataset size, and domain alignment. See `FINAL_project_submission.ipynb` for complete analysis and conclusions.
 
@@ -270,14 +270,14 @@ This notebook improves on Notebook 05 by preserving temporal information:
 
 ## Overall Comparison
 
-| Model                  |      Metric Split |   Accuracy | Test Loss | Notes                                       |
-| ---------------------- | ----------------: | ---------: | --------: | ------------------------------------------- |
-| Baseline CNN           |  Test (full data) |      ~90% |     ~0.57 | Trained from scratch                        |
-| **CNN + Dropout(0.5)** |  Test (full data) | **~92%** |    **~0.24** | **Best model**                              |
-| CRNN (CNN + BiGRU)     | Val (80/20 split) |    ~78.69% |     ~0.80 | Validation metrics only                     |
-| YAMNet (Full Sequence) |  Test (full data) |       ~66% |     ~0.96 | Transfer learning - preserves temporal info |
-| YAMNet (Averaged)      |  Test (full data) |      ~62% |     ~0.90 | Transfer learning from AudioSet             |
-| ViT-style Transformer  | Val (80/20 split) |    ~35–40% |     ~1.10 | Validation metrics only                     |
+| Model                  |      Metric Split | Accuracy | Test Loss | Notes                                       |
+| ---------------------- | ----------------: | -------: | --------: | ------------------------------------------- |
+| Baseline CNN           |  Test (full data) |     ~90% |     ~0.57 | Trained from scratch                        |
+| **CNN + Dropout(0.5)** |  Test (full data) | **~92%** | **~0.24** | **Best model**                              |
+| CRNN (CNN + BiGRU)     | Val (80/20 split) |  ~78.69% |     ~0.80 | Validation metrics only                     |
+| YAMNet (Full Sequence) |  Test (full data) |     ~66% |     ~0.96 | Transfer learning - preserves temporal info |
+| YAMNet (Averaged)      |  Test (full data) |     ~62% |     ~0.90 | Transfer learning from AudioSet             |
+| ViT-style Transformer  | Val (80/20 split) |  ~35–40% |     ~1.10 | Validation metrics only                     |
 
 **Note:** Macro F1 is reported only for models evaluated on test sets. Models evaluated on validation sets (CRNN, ViT) show "–" as Macro F1 was not calculated for those experiments.
 
