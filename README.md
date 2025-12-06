@@ -49,6 +49,7 @@ Properties:
   - `cat/` – WAV files labeled as cat
   - `bird/` – WAV files labeled as bird
 - `notebooks/`
+  - `FINAL_project_submission.ipynb` – **Final comprehensive notebook** with all experiments, results, and conclusions
   - `01_explore_audio.ipynb` – EDA on waveforms and Mel-spectrograms; visual comparison of classes
   - `02_cnn_baseline.ipynb` – baseline CNN training + evaluation on Mel-spectrogram "images"
   - `02_crnn_explore.ipynb` – CRNN (CNN + Bidirectional GRU) experiments on Mel-spectrograms
@@ -149,18 +150,20 @@ These numbers indicate that:
 
 We trained several CNN architectures on Mel-spectrograms of animal sounds (dog / cat / bird). Using the full dataset (610 audio clips) and a stratified train/val/test split (440 / 78 / 92), our best model is:
 
-- **CNN + Dropout(0.3)**  
-  Conv(32) → MaxPool → Conv(64) → MaxPool → Flatten → Dense(64, ReLU) → Dropout(0.3) → Dense(3, Softmax)
+- **CNN + Dropout(0.5)**  
+  Conv2D(32) → MaxPool → Conv2D(64) → MaxPool → Conv2D(128) → MaxPool → Flatten → Dense(128, ReLU) → Dropout(0.5) → Dense(3, Softmax)
 
 **Test set performance (on 92 held-out clips):**
 
-- Accuracy ≈ **88%**
-- Macro F1 ≈ **0.88**
-- Balanced performance across all three classes
+- Accuracy ≈ **92%**
+- Test Loss ≈ **0.24**
+- Balanced performance across all three classes (dog, cat, bird)
 
-Compared to the baseline CNN without Dropout, the regularized model achieves higher test accuracy and lower test loss, and reduces overfitting. Earlier experiments on a tiny 60-sample subset showed that strong Dropout (0.5) actually hurt performance, highlighting that regularization becomes effective only when enough training data is available.
+Compared to the baseline CNN without Dropout, the regularized model achieves higher test accuracy (~92% vs ~90%) and significantly lower test loss (0.24 vs 0.57), indicating better model calibration and reduced overfitting.
 
-See `04_cnn_full_data.ipynb` for complete results, confusion matrices, and detailed analysis.
+**📓 Final Submission Notebook:** See `notebooks/FINAL_project_submission.ipynb` for the complete project with all experiments, results, and conclusions consolidated into a single comprehensive notebook.
+
+See `04_cnn_full_data.ipynb` for detailed CNN experiments and `06_transfer_learning_yamnet_embeddings.ipynb` for transfer learning results.
 
 ---
 
@@ -215,13 +218,13 @@ The CRNN shows that adding temporal modeling with GRUs can reach competitive per
 
 The ViT experiment suggests that, under our data and compute constraints, a transformer trained from scratch on spectrogram patches is harder to optimize than a simple CNN or CRNN, and requires more data and careful tuning.
 
-| Model                  | Test Accuracy | Test Loss |  Macro F1 | Notes                |
-| ---------------------- | ------------: | --------: | --------: | -------------------- |
-| Baseline CNN           |        83.70% |    0.6283 |     ~0.81 | Trained from scratch |
-| **CNN + Dropout(0.3)** |    **88.04%** |    0.5503 | **~0.88** | **Best model**       |
-| YAMNet + Dense Head    |        61.96% |    0.8990 |     ~0.62 | Transfer learning    |
+| Model                  | Test Accuracy | Test Loss | Notes                |
+| ---------------------- | ------------: | --------: | -------------------- |
+| Baseline CNN           |         ~90% |     ~0.57 | Trained from scratch |
+| **CNN + Dropout(0.5)** |    **~92%** |     **~0.24** | **Best model**       |
+| YAMNet + Dense Head    |         ~66% |     ~0.96 | Transfer learning    |
 
-## **Key finding**: Training a CNN from scratch on Mel-spectrograms outperformed transfer learning with YAMNet for this specific task. This demonstrates that transfer learning is not always better—it depends on the task, dataset size, and domain alignment. See `05_transfer_learning.ipynb` for detailed analysis.
+## **Key finding**: Training a CNN from scratch on Mel-spectrograms achieved ~92% accuracy, significantly outperforming transfer learning with YAMNet (~66%). This demonstrates that transfer learning is not always better—it depends on the task, dataset size, and domain alignment. See `FINAL_project_submission.ipynb` for complete analysis and conclusions.
 
 ## Transfer Learning Results (YAMNet)
 
@@ -242,7 +245,6 @@ For each audio clip:
 **Results:**
 
 - Test accuracy ≈ **62%**
-- Macro F1 ≈ **0.62**
 
 ### Notebook 06: YAMNet with Full Sequence Embeddings
 
@@ -260,30 +262,30 @@ This notebook improves on Notebook 05 by preserving temporal information:
 **Results:**
 
 - Test accuracy ≈ **66%** (improvement over averaged approach)
-- Macro F1 ≈ **0.64** (improvement over averaged approach's 0.62)
 - Shows that preserving temporal information helps, but still below CNN performance
 
-**Key Finding:** While preserving temporal information improves transfer learning performance (~66% vs ~62%), training from scratch on Mel-spectrograms with a task-specific CNN still outperforms both transfer learning approaches (~88%).
+**Key Finding:** While preserving temporal information improves transfer learning performance (~66% vs ~62%), training from scratch on Mel-spectrograms with a task-specific CNN still significantly outperforms both transfer learning approaches (~92% vs ~66%).
 
 ---
 
 ## Overall Comparison
 
-| Model                  |      Metric Split |   Accuracy | Test Loss |  Macro F1 | Notes                                       |
-| ---------------------- | ----------------: | ---------: | --------: | --------: | ------------------------------------------- |
-| Baseline CNN           |  Test (full data) |     83.70% |    0.6283 |     ~0.81 | Trained from scratch                        |
-| **CNN + Dropout(0.3)** |  Test (full data) | **88.04%** |    0.5503 | **~0.88** | **Best model**                              |
-| CRNN (CNN + BiGRU)     | Val (80/20 split) |    ~78.69% |     ~0.80 |         – | Validation metrics only                     |
-| YAMNet (Full Sequence) |  Test (full data) |       ~66% |     ~0.90 |     ~0.64 | Transfer learning - preserves temporal info |
-| YAMNet (Averaged)      |  Test (full data) |     61.96% |    0.8990 |     ~0.62 | Transfer learning from AudioSet             |
-| ViT-style Transformer  | Val (80/20 split) |    ~35–40% |     ~1.10 |         – | Validation metrics only                     |
+| Model                  |      Metric Split |   Accuracy | Test Loss | Notes                                       |
+| ---------------------- | ----------------: | ---------: | --------: | ------------------------------------------- |
+| Baseline CNN           |  Test (full data) |      ~90% |     ~0.57 | Trained from scratch                        |
+| **CNN + Dropout(0.5)** |  Test (full data) | **~92%** |    **~0.24** | **Best model**                              |
+| CRNN (CNN + BiGRU)     | Val (80/20 split) |    ~78.69% |     ~0.80 | Validation metrics only                     |
+| YAMNet (Full Sequence) |  Test (full data) |       ~66% |     ~0.96 | Transfer learning - preserves temporal info |
+| YAMNet (Averaged)      |  Test (full data) |      ~62% |     ~0.90 | Transfer learning from AudioSet             |
+| ViT-style Transformer  | Val (80/20 split) |    ~35–40% |     ~1.10 | Validation metrics only                     |
 
 **Note:** Macro F1 is reported only for models evaluated on test sets. Models evaluated on validation sets (CRNN, ViT) show "–" as Macro F1 was not calculated for those experiments.
 
 **Key findings:**
 
-- Training a CNN from scratch on Mel-spectrograms outperformed both transfer learning (YAMNet) and more complex architectures (CRNN, ViT) on this specific task.
-- The CRNN achieves good validation accuracy and shows that temporal modeling can work well, but it does not beat the simpler CNN+Dropout model.
+- Training a CNN from scratch on Mel-spectrograms achieved **~92% accuracy**, significantly outperforming both transfer learning (YAMNet ~66%) and more complex architectures (CRNN, ViT) on this specific task.
+- Regularization with Dropout(0.5) improved test loss from 0.57 to 0.24, indicating better model calibration.
+- The CRNN achieves good validation accuracy (~78.69%) and shows that temporal modeling can work well, but it does not beat the simpler CNN+Dropout model.
 - The ViT-style model underfits and behaves close to random guessing, highlighting the challenge of training transformer models from scratch on small audio datasets.
 - Transfer learning is not automatically better; it depends on dataset size, domain alignment, and how well the pre-trained model's embeddings match the target task.
 
@@ -296,7 +298,8 @@ This notebook improves on Notebook 05 by preserving temporal information:
 - **Baseline CNN** implemented, trained, and evaluated with explicit train/val/test splits in `02_cnn_baseline.ipynb`.
 - **Experiment 1** (capacity reduction) in `03_cnn_improved.ipynb`: reducing the Dense layer from 64 → 32 halved parameters but did not improve generalization on the tiny 60-sample subset.
 - **Experiment 2** (Dropout on small dataset) in `03_cnn_improved.ipynb`: strong Dropout (0.5) further hurt performance, showing that heavy regularization + very little data leads to underfitting.
-- **Full-data experiments** in `04_cnn_full_data.ipynb`: trained baseline CNN and CNN+Dropout(0.3) on all 610 clips (440 train / 78 val / 92 test). The Dropout model is our final chosen model with ≈88% test accuracy and macro F1 ≈0.88.
+- **Full-data experiments** in `04_cnn_full_data.ipynb`: trained baseline CNN and CNN+Dropout(0.5) on all 610 clips (440 train / 78 val / 92 test). The Dropout model is our final chosen model with ≈92% test accuracy and test loss ≈0.24.
+- **Final submission notebook** `FINAL_project_submission.ipynb`: comprehensive notebook consolidating all experiments, results, visualizations, and conclusions for final project submission.
 - **CRNN experiments** in `02_crnn_explore.ipynb`: hybrid CNN + Bidirectional GRU model reaching ≈78.69% validation accuracy.
 - **ViT experiments** in `02_ViT_exlore.ipynb`: transformer-style classifier that underperforms (~35–40% validation accuracy), illustrating the limits of complex models with limited data.
 - **Transfer learning experiments** in `05_transfer_learning.ipynb`: YAMNet embeddings (averaged) + Dense head reaching ≈62% test accuracy.
