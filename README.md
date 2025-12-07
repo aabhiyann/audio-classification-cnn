@@ -2,6 +2,28 @@
 
 This project is for **CSCI 6366: Neural Networks & Deep Learning** at The George Washington University.
 
+---
+
+## 🎯 **FINAL SUBMISSION NOTEBOOK**
+
+**📓 PRIMARY SUBMISSION:** `FINAL_project_submission.ipynb` (located in both the root directory and `notebooks/` folder)
+
+**This is our final, comprehensive submission notebook that consolidates all our work:**
+
+- ✅ Complete Exploratory Data Analysis (EDA)
+- ✅ Baseline CNN implementation and results
+- ✅ Full dataset CNN experiments with regularization
+- ✅ Transfer learning with YAMNet embeddings
+- ✅ Comprehensive metrics (Accuracy, Precision, Recall, F1-score) for all models on both validation and test sets
+- ✅ Complete visualizations, confusion matrices, and training curves
+- ✅ Detailed analysis, key findings, and conclusions
+
+**All other notebooks in the `notebooks/` folder are exploratory/experimental work.** We combined the best parts from those notebooks into the final submission notebook for a complete, cohesive presentation of our project.
+
+---
+
+## Project Overview
+
 We build deep learning models to classify animal sounds (**dog**, **cat**, **bird**) from short audio clips using:
 
 - Mel-spectrograms and 2D Convolutional Neural Networks (CNNs)
@@ -44,12 +66,20 @@ Properties:
 
 ## Project Structure
 
+- **`FINAL_project_submission.ipynb`** ⭐ **MAIN SUBMISSION** ⭐
+  - Located in both the root directory and `notebooks/` folder
+  - **This is the final, comprehensive notebook containing all our work**
+  - Includes EDA, all model implementations, comprehensive metrics, visualizations, and conclusions
+  - **Please use this notebook for evaluation**
+
 - `data/`
   - `dog/` – WAV files labeled as dog
   - `cat/` – WAV files labeled as cat
   - `bird/` – WAV files labeled as bird
+
 - `notebooks/`
-  - `FINAL_project_submission.ipynb` – **Final comprehensive notebook** with all experiments, results, and conclusions
+  - **`FINAL_project_submission.ipynb`** – Same as above (also in root directory)
+  - **Note:** The following notebooks are **exploratory/experimental work**. We combined the best parts from these into the final submission notebook:
   - `01_explore_audio.ipynb` – EDA on waveforms and Mel-spectrograms; visual comparison of classes
   - `02_cnn_baseline.ipynb` – baseline CNN training + evaluation on Mel-spectrogram "images"
   - `02_crnn_explore.ipynb` – CRNN (CNN + Bidirectional GRU) experiments on Mel-spectrograms
@@ -58,11 +88,11 @@ Properties:
   - `04_cnn_full_data.ipynb` – final CNN experiments on full dataset with comprehensive evaluation
   - `05_transfer_learning.ipynb` – transfer learning with YAMNet embeddings (averaged); comparison with CNN models
   - `06_transfer_learning_yamnet_embeddings.ipynb` – transfer learning with YAMNet embeddings (full sequence); preserves temporal information
+
 - `src/`
   - (planned) Python modules for reusable data loading, preprocessing, and model code
-- `README.md` – this file
 
-As the project matures, most of the notebook logic will be moved into `src/` for cleaner experiments and easier reproduction.
+- `README.md` – this file
 
 ---
 
@@ -156,14 +186,22 @@ We trained several CNN architectures on Mel-spectrograms of animal sounds (dog /
 **Test set performance (on 92 held-out clips):**
 
 - Accuracy ≈ **92%**
+- Precision ≈ **92%** (macro-averaged)
+- Recall ≈ **92%** (macro-averaged)
+- F1-Score ≈ **92%** (macro-averaged)
 - Test Loss ≈ **0.24**
 - Balanced performance across all three classes (dog, cat, bird)
 
+**Validation set performance (on 78 validation clips):**
+
+- Accuracy ≈ **95%**
+- Precision ≈ **95%** (macro-averaged)
+- Recall ≈ **95%** (macro-averaged)
+- F1-Score ≈ **95%** (macro-averaged)
+
 Compared to the baseline CNN without Dropout, the regularized model achieves higher test accuracy (~92% vs ~90%) and significantly lower test loss (0.24 vs 0.57), indicating better model calibration and reduced overfitting.
 
-**📓 Final Submission Notebook:** See `notebooks/FINAL_project_submission.ipynb` for the complete project with all experiments, results, and conclusions consolidated into a single comprehensive notebook.
-
-See `04_cnn_full_data.ipynb` for detailed CNN experiments and `06_transfer_learning_yamnet_embeddings.ipynb` for transfer learning results.
+**📓 Final Submission Notebook:** See `FINAL_project_submission.ipynb` (in root directory or `notebooks/` folder) for the complete project with all experiments, comprehensive metrics (accuracy, precision, recall, F1-score for both validation and test sets), results, visualizations, and conclusions consolidated into a single comprehensive notebook.
 
 ---
 
@@ -218,11 +256,23 @@ The CRNN shows that adding temporal modeling with GRUs can reach competitive per
 
 The ViT experiment suggests that, under our data and compute constraints, a transformer trained from scratch on spectrogram patches is harder to optimize than a simple CNN or CRNN, and requires more data and careful tuning.
 
-| Model                  | Test Accuracy | Test Loss | Notes                |
-| ---------------------- | ------------: | --------: | -------------------- |
-| Baseline CNN           |          ~90% |     ~0.57 | Trained from scratch |
-| **CNN + Dropout(0.5)** |      **~92%** | **~0.24** | **Best model**       |
-| YAMNet + Dense Head    |          ~66% |     ~0.96 | Transfer learning    |
+### Test Set Metrics
+
+| Model                  | Accuracy | Precision | Recall | F1-Score | Test Loss | Notes                |
+| ---------------------- | -------: | ---------:| ------:| --------:| --------: | -------------------- |
+| Baseline CNN           |     ~90% |      ~90% |   ~90% |     ~90% |     ~0.57 | Trained from scratch |
+| **CNN + Dropout(0.5)** | **~92%** |  **~92%** | **~92%** | **~92%** | **~0.24** | **Best model**       |
+| YAMNet + Dense Head    |     ~66% |      ~60% |   ~58% |     ~58% |     ~0.96 | Transfer learning    |
+
+### Validation Set Metrics
+
+| Model                  | Accuracy | Precision | Recall | F1-Score | Notes                |
+| ---------------------- | -------: | ---------:| ------:| --------:| -------------------- |
+| Baseline CNN           |     ~94% |      ~94% |   ~94% |     ~94% | Trained from scratch |
+| **CNN + Dropout(0.5)** | **~95%** |  **~95%** | **~95%** | **~95%** | **Best model**       |
+| YAMNet + Dense Head    |     ~87% |      ~87% |   ~87% |     ~87% | Transfer learning    |
+
+*Note: All metrics are macro-averaged across all classes (dog, cat, bird). See `FINAL_project_submission.ipynb` for detailed per-class metrics and comprehensive analysis.*
 
 ## **Key finding**: Training a CNN from scratch on Mel-spectrograms achieved ~92% accuracy, significantly outperforming transfer learning with YAMNet (~66%). This demonstrates that transfer learning is not always better—it depends on the task, dataset size, and domain alignment. See `FINAL_project_submission.ipynb` for complete analysis and conclusions.
 
@@ -270,16 +320,19 @@ This notebook improves on Notebook 05 by preserving temporal information:
 
 ## Overall Comparison
 
-| Model                  |      Metric Split | Accuracy | Test Loss | Notes                                       |
-| ---------------------- | ----------------: | -------: | --------: | ------------------------------------------- |
-| Baseline CNN           |  Test (full data) |     ~90% |     ~0.57 | Trained from scratch                        |
-| **CNN + Dropout(0.5)** |  Test (full data) | **~92%** | **~0.24** | **Best model**                              |
-| CRNN (CNN + BiGRU)     | Val (80/20 split) |  ~78.69% |     ~0.80 | Validation metrics only                     |
-| YAMNet (Full Sequence) |  Test (full data) |     ~66% |     ~0.96 | Transfer learning - preserves temporal info |
-| YAMNet (Averaged)      |  Test (full data) |     ~62% |     ~0.90 | Transfer learning from AudioSet             |
-| ViT-style Transformer  | Val (80/20 split) |  ~35–40% |     ~1.10 | Validation metrics only                     |
+| Model                  |      Metric Split | Accuracy | Precision | Recall | F1-Score | Test Loss | Notes                                       |
+| ---------------------- | ----------------: | -------: | ---------:| ------:| --------:| --------: | ------------------------------------------- |
+| Baseline CNN           |  Test (full data) |     ~90% |      ~90% |   ~90% |     ~90% |     ~0.57 | Trained from scratch                        |
+| **CNN + Dropout(0.5)** |  Test (full data) | **~92%** |  **~92%** | **~92%** | **~92%** | **~0.24** | **Best model**                              |
+| Baseline CNN           |  Val (full data)  |     ~94% |      ~94% |   ~94% |     ~94% |       N/A | Trained from scratch                        |
+| **CNN + Dropout(0.5)** |  Val (full data)  | **~95%** |  **~95%** | **~95%** | **~95%** |       N/A | **Best model**                              |
+| YAMNet (Full Sequence) |  Test (full data) |     ~66% |      ~60% |   ~58% |     ~58% |     ~0.96 | Transfer learning - preserves temporal info |
+| YAMNet (Full Sequence) | Train (full data) |     ~87% |      ~87% |   ~87% |     ~87% |       N/A | Transfer learning - training metrics        |
+| CRNN (CNN + BiGRU)     | Val (80/20 split) |  ~78.69% |        N/A |    N/A |       N/A |     ~0.80 | Validation metrics only                     |
+| YAMNet (Averaged)      |  Test (full data) |     ~62% |        N/A |    N/A |       N/A |     ~0.90 | Transfer learning from AudioSet             |
+| ViT-style Transformer  | Val (80/20 split) |  ~35–40% |        N/A |    N/A |       N/A |     ~1.10 | Validation metrics only                     |
 
-**Note:** Macro F1 is reported only for models evaluated on test sets. Models evaluated on validation sets (CRNN, ViT) show "–" as Macro F1 was not calculated for those experiments.
+**Note:** All metrics are macro-averaged across all classes. Comprehensive metrics (accuracy, precision, recall, F1-score) are calculated for all models in `FINAL_project_submission.ipynb` for both validation and test sets.
 
 **Key findings:**
 
@@ -299,7 +352,7 @@ This notebook improves on Notebook 05 by preserving temporal information:
 - **Experiment 1** (capacity reduction) in `03_cnn_improved.ipynb`: reducing the Dense layer from 64 → 32 halved parameters but did not improve generalization on the tiny 60-sample subset.
 - **Experiment 2** (Dropout on small dataset) in `03_cnn_improved.ipynb`: strong Dropout (0.5) further hurt performance, showing that heavy regularization + very little data leads to underfitting.
 - **Full-data experiments** in `04_cnn_full_data.ipynb`: trained baseline CNN and CNN+Dropout(0.5) on all 610 clips (440 train / 78 val / 92 test). The Dropout model is our final chosen model with ≈92% test accuracy and test loss ≈0.24.
-- **Final submission notebook** `FINAL_project_submission.ipynb`: comprehensive notebook consolidating all experiments, results, visualizations, and conclusions for final project submission.
+- **Final submission notebook** `FINAL_project_submission.ipynb` (in root directory and `notebooks/` folder): comprehensive notebook consolidating all experiments, results, comprehensive metrics (accuracy, precision, recall, F1-score for validation and test sets), visualizations, and conclusions for final project submission. **This is our primary submission.**
 - **CRNN experiments** in `02_crnn_explore.ipynb`: hybrid CNN + Bidirectional GRU model reaching ≈78.69% validation accuracy.
 - **ViT experiments** in `02_ViT_exlore.ipynb`: transformer-style classifier that underperforms (~35–40% validation accuracy), illustrating the limits of complex models with limited data.
 - **Transfer learning experiments** in `05_transfer_learning.ipynb`: YAMNet embeddings (averaged) + Dense head reaching ≈62% test accuracy.
