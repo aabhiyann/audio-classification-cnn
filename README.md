@@ -66,7 +66,7 @@ Properties:
 
 ## Project Structure
 
-- **`FINAL_project_submission.ipynb`** ⭐ **MAIN SUBMISSION** ⭐
+- **`FINAL_project_submission.ipynb`** **MAIN SUBMISSION**
 
   - Located in both the root directory and `notebooks/` folder
   - **This is the final, comprehensive notebook containing all our work**
