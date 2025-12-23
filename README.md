@@ -33,7 +33,7 @@ We build deep learning models to classify animal sounds (**dog**, **cat**, **bir
 
 The end goal is to build a clean, reproducible pipeline and compare a simple CNN baseline against more advanced architectures and transfer-learning–based approaches.
 
-![Mel-Spectrograms](../portfolio_images/1_mel_spectrograms.png)
+![Mel-Spectrograms](images/1_mel_spectrograms.png)
 _Mel-spectrograms of dog, cat, and bird sounds - the 2D representations our CNN processes_
 
 **Key Results:**
@@ -169,7 +169,7 @@ At a high level, the baseline Mel-spectrogram → CNN pipeline does:
    - Flatten → Dense(64, relu) → Dense(3, softmax)
    - Compile with `optimizer="adam"`, `loss="categorical_crossentropy"`, `metrics=["accuracy"]`.
 
-![CNN Architecture](../portfolio_images/7_architecture_diagram.png)
+![CNN Architecture](images/7_architecture_diagram.png)
 _CNN + Dropout architecture achieving 92% accuracy_
 
 All of this is implemented and demonstrated in `02_cnn_baseline.ipynb`.
@@ -201,10 +201,10 @@ We trained several CNN architectures on Mel-spectrograms of animal sounds (dog /
 
 **Test set performance (on 92 held-out clips):**
 
-![CNN Confusion Matrix](../portfolio_images/4_cnn_confusion_matrix.png)
+![CNN Confusion Matrix](images/4_cnn_confusion_matrix.png)
 _Confusion matrix showing balanced performance across all classes_
 
-![Training Curves](../portfolio_images/6_training_curves.png)
+![Training Curves](images/6_training_curves.png)
 _Training and validation accuracy/loss over 15 epochs_
 
 - Accuracy ≈ **92%**
@@ -358,7 +358,7 @@ This notebook improves on Notebook 05 by preserving temporal information:
 
 **Key findings:**
 
-![Key Finding](../portfolio_images/8_key_finding.png)
+![Key Finding](images/8_key_finding.png)
 _Task-specific CNN training outperformed transfer learning by 26 percentage points_
 
 - Training a CNN from scratch on Mel-spectrograms achieved **~92% accuracy**, significantly outperforming both transfer learning (YAMNet ~66%) and more complex architectures (CRNN, ViT) on this specific task.
